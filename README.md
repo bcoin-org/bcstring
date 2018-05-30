@@ -1,5 +1,8 @@
 # bstring
 
+[![Build Status][travis-status-img]][travis-status-url]
+[![Coverage Status][coverage-status-img]][coverage-status-url]
+
 String encodings for javascript.
 
 ## Usage
@@ -45,3 +48,8 @@ all code is your original work. `</legalese>`
 - Copyright (c) 2017, Christopher Jeffrey (MIT License).
 
 See LICENSE for more info.
+
+[coverage-status-img]: https://coveralls.io/repos/github/nodar-chkuaselidze/bcstring/badge.svg?branch=master
+[coverage-status-url]: https://coveralls.io/github/nodar-chkuaselidze/bcstring?branch=master
+[travis-status-img]: https://travis-ci.com/nodar-chkuaselidze/bcstring.svg?branch=master
+[travis-status-url]: https://travis-ci.com/nodar-chkuaselidze/bcstring
