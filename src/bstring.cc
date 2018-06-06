@@ -12,6 +12,7 @@
 
 #include "base58.h"
 #include "bech32.h"
+#include "cashaddr.h"
 #include "bstring.h"
 
 NAN_METHOD(base58_encode) {
@@ -164,6 +165,15 @@ NAN_METHOD(bech32_test) {
   info.GetReturnValue().Set(Nan::New<v8::Boolean>(result));
 }
 
+NAN_METHOD(cashaddr_encode) {
+}
+
+NAN_METHOD(cashaddr_decode) {
+}
+
+NAN_METHOD(cashaddr_test) {
+}
+
 NAN_MODULE_INIT(init) {
   Nan::Export(target, "base58_encode", base58_encode);
   Nan::Export(target, "base58_decode", base58_decode);
@@ -171,6 +181,9 @@ NAN_MODULE_INIT(init) {
   Nan::Export(target, "bech32_encode", bech32_encode);
   Nan::Export(target, "bech32_decode", bech32_decode);
   Nan::Export(target, "bech32_test", bech32_test);
+  Nan::Export(target, "cashaddr_encode", cashaddr_encode);
+  Nan::Export(target, "cashaddr_decode", cashaddr_decode);
+  Nan::Export(target, "cashaddr_test", cashaddr_test);
 }
 
 NODE_MODULE(bstring, init)
