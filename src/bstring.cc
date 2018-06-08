@@ -166,12 +166,93 @@ NAN_METHOD(bech32_test) {
 }
 
 NAN_METHOD(cashaddr_encode) {
+  if (info.Length() < 3)
+    return Nan::ThrowError("cashaddr_encode() requires arguments.");
+
+  if (!info[0]->IsString())
+    return Nan::ThrowError("First argument must be a string.");
+
+  Nan::Utf8String prefix_str(info[0]);
+
+  if (!info[1]->IsNumber())
+    return Nan::ThrowTypeError("Second argument must be a number.");
+
+  v8::Local<v8::Object> hashbuf = info[2].As<v8::Object>();
+
+  if (!node::Buffer::HasInstance(hashbuf))
+    return Nan::ThrowTypeError("Third argument must be a buffer.");
+
+  const char *prefix = (const char *)*prefix_str;
+  int32_t type = (int32_t)info[1]->Int32Value();
+
+  const uint8_t *hash = (uint8_t *)node::Buffer::Data(hashbuf);
+  size_t hash_len = node::Buffer::Length(hashbuf);
+
+  char output[93]; // TODO check max len
+  size_t olen;
+
+  if (!bstring_cashaddr_encode(output, prefix, type, hash, hash_len))
+    return Nan::ThrowError("CashAddr encoding failed.");
+
+  olen = strlen((char *)output);
+
+  info.GetReturnValue().Set(
+    Nan::New<v8::String>((char *)output, olen).ToLocalChecked());
 }
 
 NAN_METHOD(cashaddr_decode) {
+  if (info.Length() < 2)
+    return Nan::ThrowError("cashaddr_decode() requires arguments.");
+
+  if (!info[0]->IsString())
+    return Nan::ThrowError("First argument must be a string.");
+
+  if (!info[1]->IsObject())
+    return Nan::ThrowError("Second argument must be an object.");
+
+  Nan::Utf8String addr_(info[0]);
+  const char *addr = (const char *)*addr_;
+
+  v8::Local<v8::Object> ret = info[1].As<v8::Object>();
+
+  uint8_t hash[40]; // TODO check max len
+  size_t hash_len;
+  int type;
+  char prefix[84]; // TODO check max len
+  size_t prefix_len;
+
+  if (!bstring_cashaddr_decode(&type, hash, &hash_len, prefix, addr))
+    return Nan::ThrowError("Invalid CashAddr string.");
+
+  prefix_len = strlen((char *)&prefix[0]);
+
+  Nan::Set(ret,
+    Nan::New<v8::String>("prefix").ToLocalChecked(),
+    Nan::New<v8::String>((char *)&prefix[0], prefix_len).ToLocalChecked());
+
+  Nan::Set(ret,
+    Nan::New<v8::String>("type").ToLocalChecked(),
+    Nan::New<v8::Number>(type));
+
+  Nan::Set(ret,
+    Nan::New<v8::String>("hash").ToLocalChecked(),
+    Nan::CopyBuffer((char *)&hash[0], hash_len).ToLocalChecked());
+
+  info.GetReturnValue().Set(ret);
 }
 
 NAN_METHOD(cashaddr_test) {
+  if (info.Length() < 1 || !info[0]->IsString()) {
+    info.GetReturnValue().Set(Nan::New<v8::Boolean>(false));
+    return;
+  }
+
+  Nan::Utf8String addr_(info[0]);
+  const char *addr = (const char *)*addr_;
+
+  bool result = bstring_cashaddr_test(addr);
+
+  info.GetReturnValue().Set(Nan::New<v8::Boolean>(result));
 }
 
 NAN_MODULE_INIT(init) {
