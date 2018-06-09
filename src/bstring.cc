@@ -188,7 +188,7 @@ NAN_METHOD(cashaddr_encode) {
   const uint8_t *hash = (uint8_t *)node::Buffer::Data(hashbuf);
   size_t hash_len = node::Buffer::Length(hashbuf);
 
-  char output[93]; // TODO check max len
+  char output[1024]; // TODO check max len
   size_t olen;
 
   if (!bstring_cashaddr_encode(output, prefix, type, hash, hash_len))

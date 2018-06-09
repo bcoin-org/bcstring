@@ -26,15 +26,15 @@
 
 #include "cashaddr.h"
 
-static uint32_t
+static uint64_t
 cashaddr_polymod_step(uint64_t pre) {
   uint8_t b = pre >> 35;
   return ((pre & 0x07ffffffff) << 5)
-    ^ (-((b >> 0x01) & 1) & 0x98f2bc8e61ul)
-    ^ (-((b >> 0x02) & 1) & 0x79b76d99e2ul)
-    ^ (-((b >> 0x04) & 1) & 0xf33e5fb3c4ul)
-    ^ (-((b >> 0x08) & 1) & 0xae2eabe2a8ul)
-    ^ (-((b >> 0x10) & 1) & 0x1e4f43e470ul);
+    ^ (-((b >> 0) & 1) & 0x98f2bc8e61ul)
+    ^ (-((b >> 1) & 1) & 0x79b76d99e2ul)
+    ^ (-((b >> 2) & 1) & 0xf33e5fb3c4ul)
+    ^ (-((b >> 3) & 1) & 0xae2eabe2a8ul)
+    ^ (-((b >> 4) & 1) & 0x1e4f43e470ul);
 }
 
 static const char *CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
@@ -90,44 +90,39 @@ cashaddr_encode(
   const uint8_t *data,
   size_t data_len
 ) {
-  uint32_t chk = 1;
+  uint64_t chk = 1;
   size_t i = 0;
 
   while (prefix[i] != 0) {
     if (!(prefix[i] >> 5))
       return 0;
 
-    chk = cashaddr_polymod_step(chk) ^ (prefix[i] >> 5);
+    chk = cashaddr_polymod_step(chk);
+    chk ^= (prefix[i] & 0x1f);
+    *(output++) = prefix[i];
     i += 1;
   }
 
-  if (i + 7 + data_len > 90)
-    return 0;
-
   chk = cashaddr_polymod_step(chk);
-
-  while (*prefix != 0) {
-    chk = cashaddr_polymod_step(chk) ^ (*prefix & 0x1f);
-    *(output++) = *(prefix++);
-  }
-
   *(output++) = ':';
 
   for (i = 0; i < data_len; i++) {
-    if (*data >> 5) return 0;
-    chk = cashaddr_polymod_step(chk) ^ (*data);
-    *(output++) = CHARSET[*(data++)];
+    uint8_t ch = data[i];
+    if (ch >> 5)
+      return 0;
+
+    chk = cashaddr_polymod_step(chk);
+    chk ^= ch;
+    *(output++) = CHARSET[ch];
   }
 
-  for (i = 0; i < 6; i++)
+  for (i = 0; i < 8; i++)
     chk = cashaddr_polymod_step(chk);
 
   chk ^= 1;
 
-  for (i = 0; i < 6; i++)
-    *(output++) = CHARSET[(chk >> ((5 - i) * 5)) & 0x1f];
-
-  *output = 0;
+  for (i = 0; i < 8; i++)
+    *(output++) = CHARSET[(chk >> ((7 - i) * 5)) & 0x1f];
 
   return 1;
 }
@@ -141,9 +136,8 @@ cashaddr_decode(char *prefix, uint8_t *data, size_t *data_len, const char *input
 
   int have_lower = 0, have_upper = 0;
 
-  if (input_len < 8 || input_len > 90) {
+  if (input_len < 8 || input_len > 90)
     return 0;
-  }
 
   *data_len = 0;
 
@@ -251,8 +245,6 @@ bstring_cashaddr_encode(
   const uint8_t *hash,
   size_t hash_len
 ) {
-  uint8_t data[65]; // TODO max size
-  size_t datalen = 0;
   uint8_t encoded_size = 0;
 
   if (type < 0 || type > 1)
@@ -262,12 +254,18 @@ bstring_cashaddr_encode(
     return false;
 
   uint8_t version_byte = type << 3 | encoded_size;
+
+  size_t data_len = hash_len + 1;
+  uint8_t data[data_len];
   data[0] = version_byte;
+  memcpy(data + 1, hash, hash_len);
 
-  convert_bits(data + 1, &datalen, 5, hash, hash_len, 8, 1);
-  datalen += 1;
+  size_t converted_len = 0;
+  uint8_t converted[data_len + 8]; // TODO check max len
 
-  return cashaddr_encode(output, prefix, data, datalen);
+  convert_bits(converted, &converted_len, 5, data, data_len, 8, 1);
+
+  return cashaddr_encode(output, prefix, converted, converted_len);
 }
 
 bool
