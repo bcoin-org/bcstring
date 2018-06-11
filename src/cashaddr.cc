@@ -129,23 +129,25 @@ cashaddr_encode(
 
 static int
 cashaddr_decode(char *prefix, uint8_t *data, size_t *data_len, const char *input) {
-  uint32_t chk = 1;
+  uint64_t chk = 1;
   size_t i;
   size_t input_len = strlen(input);
   size_t prefix_len;
 
   int have_lower = 0, have_upper = 0;
 
-  if (input_len < 8 || input_len > 90)
+  if (input_len < 8 || input_len > 120) // TODO check max length
     return 0;
 
   *data_len = 0;
 
+  // TODO verify only one prefix is possible
   while (*data_len < input_len && input[(input_len - 1) - *data_len] != ':')
     (*data_len) += 1;
 
   prefix_len = input_len - (1 + *data_len);
 
+  // TODO verify min/max lengths for prefix and data
   if (prefix_len < 1 || *data_len < 6)
     return 0;
 
@@ -165,20 +167,16 @@ cashaddr_decode(char *prefix, uint8_t *data, size_t *data_len, const char *input
     }
 
     prefix[i] = ch;
-    chk = cashaddr_polymod_step(chk) ^ (ch >> 5);
+    chk = cashaddr_polymod_step(chk);
+    chk ^= (ch | 0x20) & 0x1f;
   }
 
-  prefix[i] = 0;
-
   chk = cashaddr_polymod_step(chk);
-
-  for (i = 0; i < prefix_len; i++)
-    chk = cashaddr_polymod_step(chk) ^ (input[i] & 0x1f);
 
   i += 1;
 
   while (i < input_len) {
-    int v = (input[i] & 0x80) ? -1 : TABLE[(int)input[i]];
+    int v = (input[i] & 0xff80) ? -1 : TABLE[(int)input[i]];
 
     if (input[i] >= 'a' && input[i] <= 'z')
       have_lower = 1;
@@ -191,7 +189,7 @@ cashaddr_decode(char *prefix, uint8_t *data, size_t *data_len, const char *input
 
     chk = cashaddr_polymod_step(chk) ^ v;
 
-    if (i + 6 < input_len)
+    if (i + 8 < input_len)
       data[i - (1 + prefix_len)] = v;
 
     i += 1;
@@ -227,11 +225,11 @@ convert_bits(
   }
 
   if (pad) {
-    if (bits) {
+    if (bits)
       out[(*outlen)++] = (val << (outbits - bits)) & maxv;
-    }
-  } else if (((val << (outbits - bits)) & maxv) || bits >= inbits) {
-    return 0;
+  } else {
+    if (bits >= inbits || ((val << (outbits - bits)) & maxv))
+      return 0;
   }
 
   return 1;
@@ -264,7 +262,9 @@ bstring_cashaddr_encode(
   size_t converted_len = 0;
   uint8_t converted[data_len + 8]; // TODO check max len
 
-  convert_bits(converted, &converted_len, 5, data, data_len, 8, 1);
+  if (!convert_bits(converted, &converted_len, 5, data, data_len, 8, 1)) {
+    return false;
+  }
 
   return cashaddr_encode(output, prefix, converted, converted_len);
 }
@@ -277,8 +277,9 @@ bstring_cashaddr_decode(
   char *prefix,
   const char *addr
 ) {
-  uint8_t data[84]; // TODO check max length
-  size_t data_len;
+  uint8_t data[1024];  // TODO check max length
+  memset(&data, 0, 1024);
+  size_t data_len = 0;
 
   if (!cashaddr_decode(prefix, data, &data_len, addr))
     return false;
@@ -287,17 +288,17 @@ bstring_cashaddr_decode(
   // TODO check type
   // TODO check padding
 
-  *hash_len = 0;
-
-  uint8_t converted[160]; // TODO check max length
+  uint8_t converted[1024]; // TODO check max length
+  memset(&converted, 0, 1024);
   size_t converted_len = 0;
 
-  if (!convert_bits(converted, &converted_len, 8, data + 1, data_len - 1, 5, 0))
+  if (!convert_bits(converted, &converted_len, 8, data, data_len, 5, 0))
     return false;
 
   *type = (converted[0] >> 3) & 0x1f;
-  *hash = *converted + 1;
-  *hash_len = converted_len - 1;
+  *hash_len = converted_len - 2;
+  // TODO set pointer instead of memcpy?
+  memcpy(hash, converted + 1, *hash_len);
 
   uint8_t size = 20 + 4 * (converted[0] & 0x03);
 

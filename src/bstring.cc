@@ -216,10 +216,12 @@ NAN_METHOD(cashaddr_decode) {
 
   v8::Local<v8::Object> ret = info[1].As<v8::Object>();
 
-  uint8_t hash[40]; // TODO check max len
+  uint8_t hash[64]; // TODO check max len
+  memset(hash, 0, 64);
   size_t hash_len;
   int type;
   char prefix[84]; // TODO check max len
+  memset(prefix, 0, 84);
   size_t prefix_len;
 
   if (!bstring_cashaddr_decode(&type, hash, &hash_len, prefix, addr))
