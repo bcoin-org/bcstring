@@ -247,7 +247,8 @@ bstring_cashaddr_encode(
 ) {
   uint8_t encoded_size = 0;
 
-  if (type < 0 || type > 1)
+  // There are 4 bits available for the version (2 ^ 4 = 16)
+  if (type < 0 || type > 15)
     return false;
 
   if (!cashaddr_encoded_size(hash_len, &encoded_size))
