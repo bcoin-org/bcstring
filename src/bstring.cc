@@ -189,7 +189,8 @@ NAN_METHOD(cashaddr_encode) {
   size_t hash_len = node::Buffer::Length(hashbuf);
 
   char output[1024]; // TODO check max len
-  size_t olen;
+  memset(&output, 0, 1024);
+  size_t olen = 0;
 
   if (!bstring_cashaddr_encode(output, prefix, type, hash, hash_len))
     return Nan::ThrowError("CashAddr encoding failed.");
