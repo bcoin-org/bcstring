@@ -148,10 +148,10 @@ cashaddr_decode(char *prefix, uint8_t *data, size_t *data_len, const char *input
   prefix_len = input_len - (1 + *data_len);
 
   // TODO verify min/max lengths for prefix and data
-  if (prefix_len < 1 || *data_len < 6)
+  if (prefix_len < 1 || *data_len < 8)
     return 0;
 
-  *(data_len) -= 6;
+  *(data_len) -= 8;
 
   for (i = 0; i < prefix_len; i++) {
     int ch = input[i];
@@ -296,7 +296,7 @@ bstring_cashaddr_decode(
     return false;
 
   *type = (converted[0] >> 3) & 0x1f;
-  *hash_len = converted_len - 2;
+  *hash_len = converted_len - 1;
   // TODO set pointer instead of memcpy?
   memcpy(hash, converted + 1, *hash_len);
 
