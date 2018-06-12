@@ -136,18 +136,15 @@ cashaddr_decode(char *prefix, uint8_t *data, size_t *data_len, const char *input
 
   int have_lower = 0, have_upper = 0;
 
-  if (input_len < 8 || input_len > 120) // TODO check max length
+  if (input_len < 8 || input_len > 1024) // TODO check max length
     return 0;
 
-  *data_len = 0;
+  while (prefix_len < input_len && input[prefix_len] != ':')
+    prefix_len++;
 
-  // TODO verify only one prefix is possible
-  while (*data_len < input_len && input[(input_len - 1) - *data_len] != ':')
-    (*data_len) += 1;
+  *data_len = input_len - (1 + prefix_len);
 
-  prefix_len = input_len - (1 + *data_len);
-
-  // TODO verify min/max lengths for prefix and data
+  // TODO check max and min length
   if (prefix_len < 1 || *data_len < 8)
     return 0;
 
