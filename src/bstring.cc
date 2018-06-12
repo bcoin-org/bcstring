@@ -192,8 +192,11 @@ NAN_METHOD(cashaddr_encode) {
   memset(&output, 0, 1024);
   size_t olen = 0;
 
-  if (!bstring_cashaddr_encode(output, prefix, type, hash, hash_len))
-    return Nan::ThrowError("CashAddr encoding failed.");
+  bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
+
+  if (!bstring_cashaddr_encode(&err, output, prefix, type, hash, hash_len)) {
+    return Nan::ThrowError(bstring_cashaddr_strerror(err));
+  }
 
   olen = strlen((char *)output);
 
@@ -224,8 +227,11 @@ NAN_METHOD(cashaddr_decode) {
   memset(prefix, 0, 84);
   size_t prefix_len;
 
-  if (!bstring_cashaddr_decode(&type, hash, &hash_len, prefix, addr))
-    return Nan::ThrowError("Invalid CashAddr string.");
+  bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
+
+  if (!bstring_cashaddr_decode(&err, &type, hash, &hash_len, prefix, addr)) {
+    return Nan::ThrowError(bstring_cashaddr_strerror(err));
+  }
 
   prefix_len = strlen((char *)&prefix[0]);
 
@@ -253,7 +259,9 @@ NAN_METHOD(cashaddr_test) {
   Nan::Utf8String addr_(info[0]);
   const char *addr = (const char *)*addr_;
 
-  bool result = bstring_cashaddr_test(addr);
+  bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
+
+  bool result = bstring_cashaddr_test(&err, addr);
 
   info.GetReturnValue().Set(Nan::New<v8::Boolean>(result));
 }

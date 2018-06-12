@@ -23,6 +23,16 @@
 #ifndef _BSTRING_CASHADDR_H
 #define _BSTRING_CASHADDR_H 1
 
+typedef enum bstring_cashaddr_error_t {
+  bstring_cashaddr_ERR_NULL = 0,
+  bstring_cashaddr_ERR_CHECKSUM,
+  bstring_cashaddr_ERR_LENGTH,
+  bstring_cashaddr_ERR_CASING,
+  bstring_cashaddr_ERR_PADDING,
+  bstring_cashaddr_ERR_NONZERO_PADDING,
+  bstring_cashaddr_ERR_CHARACTER,
+} bstring_cashaddr_error;
+
 #include <stdint.h>
 
 /** Encode a CashAddr
@@ -38,6 +48,7 @@
  */
 bool
 bstring_cashaddr_encode(
+  bstring_cashaddr_error *err,
   char *output,
   const char *prefix,
   int type,
@@ -60,6 +71,7 @@ bstring_cashaddr_encode(
  */
 bool
 bstring_cashaddr_decode(
+  bstring_cashaddr_error *err,
   int* type,
   uint8_t* hash,
   size_t* hash_len,
@@ -68,6 +80,9 @@ bstring_cashaddr_decode(
 );
 
 bool
-bstring_cashaddr_test(const char *addr);
+bstring_cashaddr_test(bstring_cashaddr_error *err, const char *addr);
+
+const char *
+bstring_cashaddr_strerror(bstring_cashaddr_error err);
 
 #endif
