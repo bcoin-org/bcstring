@@ -40,6 +40,7 @@ const {
   p2sh: addressTranslationP2SH
 } = require('./data/cashaddrlegacy.json');
 const testSizeVectors = require('./data/cashaddrsizes.json');
+const invalidVectors = require('./data/cashaddrinvalid.json');
 
 function testCashAddr(cashaddr) {
   describe.skip('checksums', function() {
@@ -154,6 +155,22 @@ function testCashAddr(cashaddr) {
 	assert.strictEqual(results.prefix, 'bitcoincash');
 	assert.strictEqual(results.type, 1);
 	assert.bufferEqual(results.hash, Buffer.from(addrinfo.hash, 'hex'));
+      });
+    }
+  });
+
+  describe('invalid', function() {
+    for (const addrinfo of invalidVectors) {
+      it(`"${addrinfo.reason}" w/ invalid address ${addrinfo.addr}`, () => {
+	let err;
+
+	try {
+	  const { type, prefix, hash } = cashaddr.decode(addrinfo.addr);
+	} catch(e) {
+	  err = e;
+	}
+	assert(err, 'Exception error missing.');
+	assert.strictEqual(err.message, addrinfo.reason);
       });
     }
   });
