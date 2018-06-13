@@ -84,7 +84,8 @@ bstring_cashaddr_decode(
 bool
 bstring_cashaddr_test(
   bstring_cashaddr_error *err,
-  const char *default_prefix, const char *addr
+  const char *default_prefix,
+  const char *addr
 );
 
 const char *
