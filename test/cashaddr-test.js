@@ -28,8 +28,6 @@
 
 'use strict';
 
-const crypto = require('crypto');
-
 const assert = require('./util/assert');
 const base58 = require('../lib/base58');
 
