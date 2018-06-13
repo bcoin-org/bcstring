@@ -134,12 +134,13 @@ cashaddr_decode(
   char *prefix,
   uint8_t *data,
   size_t *data_len,
+  const char *default_prefix,
   const char *input
 ) {
   uint64_t chk = 1;
   size_t i;
   size_t input_len = strlen(input);
-  size_t prefix_len;
+  size_t prefix_len = 0;
 
   int have_lower = 0;
   int have_upper = 0;
@@ -153,18 +154,21 @@ cashaddr_decode(
   while (prefix_len < input_len && input[prefix_len] != ':')
     prefix_len++;
 
-  *data_len = input_len - (1 + prefix_len);
+  const bool has_prefix = !(prefix_len == input_len);
 
-  // TODO check max and min length
-  if (prefix_len < 1 || *data_len < 8) {
+  const char *prefix_input = has_prefix ? input : default_prefix;
+  size_t prefix_input_len = has_prefix ? prefix_len : strlen(default_prefix);
+  *data_len = has_prefix ? input_len - (1 + prefix_len) : input_len;
+
+  if (prefix_input_len < 1 || *data_len < 8) {
     *err = bstring_cashaddr_ERR_LENGTH;
     return false;
   }
 
-  *(data_len) -= 8;
+  *data_len -= 8;
 
-  for (i = 0; i < prefix_len; i++) {
-    int ch = input[i];
+  for (i = 0; i < prefix_input_len; i++) {
+    int ch = prefix_input[i];
 
     if (ch < 33 || ch > 126) {
       *err = bstring_cashaddr_ERR_CHARACTER;
@@ -185,7 +189,7 @@ cashaddr_decode(
 
   chk = cashaddr_polymod_step(chk);
 
-  i += 1;
+  i = has_prefix ? prefix_len + 1 : 0;
 
   while (i < input_len) {
     int v = (input[i] & 0xff80) ? -1 : TABLE[(int)input[i]];
@@ -203,8 +207,10 @@ cashaddr_decode(
 
     chk = cashaddr_polymod_step(chk) ^ v;
 
-    if (i + 8 < input_len)
-      data[i - (1 + prefix_len)] = v;
+    if (i + 8 < input_len) {
+      int x = has_prefix ? i - (1 + prefix_len) : i;
+      data[x] = v;
+    }
 
     i += 1;
   }
@@ -305,13 +311,14 @@ bstring_cashaddr_decode(
   uint8_t *hash,
   size_t *hash_len,
   char *prefix,
+  const char *default_prefix,
   const char *addr
 ) {
   uint8_t data[1024];  // TODO check max length
   memset(&data, 0, 1024);
   size_t data_len = 0;
 
-  if (!cashaddr_decode(err, prefix, data, &data_len, addr))
+  if (!cashaddr_decode(err, prefix, data, &data_len, default_prefix, addr))
     return false;
 
   size_t extrabits = (data_len * 5) % 8;
@@ -356,12 +363,16 @@ bstring_cashaddr_decode(
 }
 
 bool
-bstring_cashaddr_test(bstring_cashaddr_error *err, const char *addr) {
+bstring_cashaddr_test(
+  bstring_cashaddr_error *err,
+  const char *default_prefix,
+  const char *addr
+) {
   char prefix[84]; // TODO check max length
   uint8_t data[84]; // TODO check max length
   size_t data_len;
 
-  if (!cashaddr_decode(err, prefix, data, &data_len, addr))
+  if (!cashaddr_decode(err, prefix, data, &data_len, default_prefix, addr))
     return false;
 
   return true;

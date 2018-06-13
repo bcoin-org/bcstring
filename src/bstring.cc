@@ -211,13 +211,19 @@ NAN_METHOD(cashaddr_decode) {
   if (!info[0]->IsString())
     return Nan::ThrowError("First argument must be a string.");
 
-  if (!info[1]->IsObject())
-    return Nan::ThrowError("Second argument must be an object.");
+  if (!info[1]->IsString())
+    return Nan::ThrowError("Second argument must be a string.");
+
+  if (!info[2]->IsObject())
+    return Nan::ThrowError("Third argument must be an object.");
 
   Nan::Utf8String addr_(info[0]);
   const char *addr = (const char *)*addr_;
 
-  v8::Local<v8::Object> ret = info[1].As<v8::Object>();
+  Nan::Utf8String default_prefix_(info[1]);
+  const char *default_prefix = (const char *)*default_prefix_;
+
+  v8::Local<v8::Object> ret = info[2].As<v8::Object>();
 
   uint8_t hash[64]; // TODO check max len
   memset(hash, 0, 64);
@@ -229,7 +235,7 @@ NAN_METHOD(cashaddr_decode) {
 
   bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
 
-  if (!bstring_cashaddr_decode(&err, &type, hash, &hash_len, prefix, addr)) {
+  if (!bstring_cashaddr_decode(&err, &type, hash, &hash_len, prefix, default_prefix, addr)) {
     return Nan::ThrowError(bstring_cashaddr_strerror(err));
   }
 
@@ -256,12 +262,18 @@ NAN_METHOD(cashaddr_test) {
     return;
   }
 
+  if (!info[1]->IsString())
+    return Nan::ThrowError("Second argument must be a string.");
+
   Nan::Utf8String addr_(info[0]);
   const char *addr = (const char *)*addr_;
 
+  Nan::Utf8String default_prefix_(info[1]);
+  const char *default_prefix = (const char *)*default_prefix_;
+
   bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
 
-  bool result = bstring_cashaddr_test(&err, addr);
+  bool result = bstring_cashaddr_test(&err, default_prefix, addr);
 
   info.GetReturnValue().Set(Nan::New<v8::Boolean>(result));
 }

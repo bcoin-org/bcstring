@@ -66,6 +66,7 @@ bstring_cashaddr_encode(
  *                 of bytes in hash.
  *       prefix:   Pointer to the null-terminated human readable prefix that will
  *                 be updated to contain the string.
+ *       default_prefix:  Default prefix to be used.
  *       addr:     Pointer to the null-terminated address.
  *  Returns true if successful.
  */
@@ -76,11 +77,15 @@ bstring_cashaddr_decode(
   uint8_t* hash,
   size_t* hash_len,
   char* prefix,
+  const char* default_prefix,
   const char* addr
 );
 
 bool
-bstring_cashaddr_test(bstring_cashaddr_error *err, const char *addr);
+bstring_cashaddr_test(
+  bstring_cashaddr_error *err,
+  const char *default_prefix, const char *addr
+);
 
 const char *
 bstring_cashaddr_strerror(bstring_cashaddr_error err);
