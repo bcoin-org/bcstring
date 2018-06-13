@@ -37,13 +37,17 @@ typedef enum bstring_cashaddr_error_t {
 
 /** Encode a CashAddr
  *
- *  Out: output:   Pointer to a buffer of size 73 (TODO check size) + strlen(prefix)
- *                 that will be updated to contain the null-terminated address.
- *  In:  prefix:   Pointer to the null-terminated human readable prefix to use
- *                 (chain/network specific).
- *       type:     The type of the address 0 or 1 for P2KH and P2SH
- *       hash:     Data bytes for the hash
- *       hash_len: Number of data bytes in hash
+ *  Out:
+ *    err:             Pointer to an int that will be updated to contain the error
+ *                     number with specific details.
+ *    output:          Pointer to a buffer of size 73 (TODO check size) + strlen(prefix)
+ *                     that will be updated to contain the null-terminated address.
+ *  In:
+ *    prefix:          Pointer to the null-terminated human readable prefix to use
+ *                     (chain/network specific).
+ *    type:            The type of the address 0 or 1 for P2KH and P2SH.
+ *    hash:            Data bytes for the hash from 20 to 64 bytes.
+ *    hash_len:        Number of data bytes in hash from 20 to 64 bytes.
  *  Returns true if successful.
  */
 bool
@@ -58,16 +62,21 @@ bstring_cashaddr_encode(
 
 /** Decode a CashAddr
  *
- *  Out: type:     Pointer to an int that will be updated to contain the witness
- *                 program version (0 or 1 for P2KH or P2SH).
- *       hash:     Pointer to a buffer of size 40 (TODO check size) that will be
- *                 updated to contain the witness program bytes.
- *       hash_len: Pointer to a size_t that will be updated to contain the length
- *                 of bytes in hash.
- *       prefix:   Pointer to the null-terminated human readable prefix that will
- *                 be updated to contain the string.
- *       default_prefix:  Default prefix to be used.
- *       addr:     Pointer to the null-terminated address.
+ *  Out:
+ *    err:             Pointer to an int that will be updated to contain the error
+ *                     number with specific details.
+ *    type:            Pointer to an int that will be updated to contain the type
+ *                     of address (0 or 1 for P2KH or P2SH).
+ *    hash:            Pointer to a buffer of size 20 to 64 bytes that will be
+ *                     updated to contain the hash.
+ *    hash_len:        Pointer to a size_t that will be updated to contain the
+ *                     length of bytes in the hash.
+ *    prefix:          Pointer to the null-terminated human readable prefix that
+ *                     will be updated to contain the string.
+ *  In:
+ *    default_prefix:  Default prefix to be used, in the event that the addr
+ *                     does not include the prefix.
+ *    addr:            Pointer to the null-terminated address.
  *  Returns true if successful.
  */
 bool
