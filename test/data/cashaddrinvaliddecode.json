@@ -1,22 +1,62 @@
 [
   {
     "addr": "bitcoincash:pr5vxqxg0xrwl2zvxlq9rxffqx00sm44ks62zuqyrr",
-    "reason": "Invalid cashaddr checksum."
+    "reason": "Invalid cashaddr checksum.",
+    "note": "Incorrect checksum"
   },
   {
     "addr": "bitcoincash:qpg4nt2nwm9mm2a6s6gmcmjx2yr7c9kvta",
-    "reason": "Invalid cashaddr data length."
+    "reason": "Invalid cashaddr data length.",
+    "note": "Invalid data length, too short"
   },
   {
     "addr": "bitcoincash:pruptvpkmxamee0f72Sq40gm70wfr624zq0yyxtycm",
-    "reason": "Invalid cashaddr casing."
+    "reason": "Invalid cashaddr casing.",
+    "note": "Invalid casing in data"
   },
   {
     "addr": "bitcoincash:pruptvpkmxamee0f72sq40gm70wfr624zqqn4vewfdw",
-    "reason": "Invalid padding in data."
+    "reason": "Invalid padding in data.",
+    "note": "Invalid padding, not expected"
   },
   {
     "addr": "bitcoincash:pruptvpkmxamee0f72sq40gm70wfr624zpu8adj8t6",
-    "reason": "Non zero padding."
+    "reason": "Non zero padding.",
+    "note": "Non zero padding, not expected"
+  },
+  {
+    "addr": "bitcoincash:quqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqae3zaarz",
+    "reason": "Invalid data length.",
+    "note": "Data length is too long"
+  },
+  {
+    "addr": "bitcoincash:quqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqae3zaarz",
+    "reason": "Invalid data length.",
+    "note": "Data length is really too long"
+  },
+  {
+    "addr": "bitcoincash:ae3zaarz",
+    "reason": "Invalid data length.",
+    "note": "Missing data"
+  },
+  {
+    "addr": ":qqqqqz9njldwwzlg9v7v53unlr4jkmx6eycaeuzs77",
+    "reason": "Invalid prefix length.",
+    "note": "Missing prefix, however with semicolon"
+  },
+  {
+    "addr": "prefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefix:qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9s6yrdsd",
+    "reason": "Invalid prefix length.",
+    "note": "Prefix is one character too long"
+  },
+  {
+    "addr": "PrEfIx:qqqqqz9njldwwzlg9v7v53unlr4jkmx6eycaeuzs77",
+    "reason": "Invalid cashaddr casing.",
+    "note": "Prefix has mixed case"
+  },
+  {
+    "addr": "bitcoincash:Cq92bpGSB2z/DvCNmRPzQGJzktY=",
+    "reason": "Invalid character.",
+    "note": "Base64 encoding not expected"
   }
 ]
