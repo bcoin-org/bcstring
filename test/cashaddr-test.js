@@ -28,6 +28,8 @@
 
 'use strict';
 
+const crypto = require('crypto');
+
 const assert = require('./util/assert');
 const base58 = require('../lib/base58');
 
@@ -40,10 +42,11 @@ const {
   p2sh: addressTranslationP2SH
 } = require('./data/cashaddrlegacy.json');
 const testSizeVectors = require('./data/cashaddrsizes.json');
-const invalidVectors = require('./data/cashaddrinvalid.json');
+const invalidDecodeVectors = require('./data/cashaddrinvaliddecode.json');
+const invalidEncodeVectors = require('./data/cashaddrinvalidencode.json');
 
 function testCashAddr(cashaddr) {
-  describe.skip('checksums', function() {
+  describe('checksums', function() {
     for (const test of testChecksumVectors) {
       it(`should deserialize ${test.test}.`, () => {
 	const [prefix, data] = cashaddr.deserialize(test.test);
@@ -159,8 +162,8 @@ function testCashAddr(cashaddr) {
     }
   });
 
-  describe('invalid', function() {
-    for (const addrinfo of invalidVectors) {
+  describe('invalid decoding', function() {
+    for (const addrinfo of invalidDecodeVectors) {
       it(`"${addrinfo.reason}" w/ invalid address ${addrinfo.addr}`, () => {
 	let err;
 
@@ -171,6 +174,21 @@ function testCashAddr(cashaddr) {
 	}
 	assert(err, 'Exception error missing.');
 	assert.strictEqual(err.message, addrinfo.reason);
+      });
+    }
+  });
+
+  describe('invalid encoding', function() {
+    for (const test of invalidEncodeVectors) {
+      it(`"${test.reason}" (${test.note})`, () => {
+	let err;
+	try {
+	  const addr = cashaddr.encode(test.prefix, test.type, Buffer.from(test.hash, 'hex'));
+	} catch(e) {
+	  err = e;
+	}
+	assert(err, 'Exception error missing.');
+	assert.strictEqual(err.message, test.reason);
       });
     }
   });
