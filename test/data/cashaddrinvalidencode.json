@@ -7,11 +7,39 @@
     "note": "Prefix is necessary"
   },
   {
+    "prefix": "pReFiX",
+    "type": 1,
+    "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
+    "reason": "Invalid cashaddr casing.",
+    "note": "Mixed case prefix should be rejected"
+  },
+  {
+    "prefix": "prefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefix",
+    "type": 1,
+    "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
+    "reason": "Invalid cashaddr length.",
+    "note": "84 characters US-ASCII, too long. Not described in spec."
+  },
+  {
+    "prefix": "pr3ph1x",
+    "type": 1,
+    "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
+    "reason": "Invalid cashaddr length.",
+    "note": "Numbers in prefix. Not described in spec."
+  },
+  {
     "prefix": "p",
     "type": 16,
     "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
     "reason": "Invalid cashaddr type.",
     "note": "0 to 15 are valid types"
+  },
+  {
+    "prefix": "p",
+    "type": 0.5,
+    "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
+    "reason": "Invalid cashaddr type.",
+    "note": "Floating point numbers not valid types"
   },
   {
     "prefix": "bitcoincash",

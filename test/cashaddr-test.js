@@ -44,6 +44,7 @@ const {
 const testSizeVectors = require('./data/cashaddrsizes.json');
 const invalidDecodeVectors = require('./data/cashaddrinvaliddecode.json');
 const invalidEncodeVectors = require('./data/cashaddrinvalidencode.json');
+const validEdgeVectors = require('./data/cashaddredge.json');
 
 function testCashAddr(cashaddr) {
   describe('checksums', function() {
@@ -192,6 +193,23 @@ function testCashAddr(cashaddr) {
       });
     }
   });
+
+  describe('valid edge cases', function() {
+    for (const test of validEdgeVectors) {
+      it(`${test.note} with address: ${test.addr}`, () => {
+	const addr = cashaddr.encode(test.prefix, test.type, Buffer.from(test.hash, 'hex'));
+	assert.strictEqual(addr, test.addr.toLowerCase());
+      });
+
+      it(`${test.note} with address: ${test.addr}`, () => {
+	const { type, prefix, hash } = cashaddr.decode(test.addr);
+	assert.strictEqual(type, test.type);
+	assert.strictEqual(prefix.toLowerCase(), test.prefix.toLowerCase());
+	assert.bufferEqual(hash, Buffer.from(test.hash, 'hex'));
+      });
+    }
+  });
+
 }
 
 describe('cashaddr', function() {
