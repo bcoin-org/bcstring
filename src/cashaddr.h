@@ -44,7 +44,7 @@ typedef enum bstring_cashaddr_error_t {
  *  Out:
  *    err:             Pointer to an int that will be updated to contain the error
  *                     number with specific details.
- *    output:          Pointer to a buffer of max 64 + 1 + 83 bytes
+ *    output:          Pointer to a buffer of max 83 + 1 + 112 + 1 bytes (197 bytes)
  *                     that will be updated to contain the null-terminated address.
  *  In:
  *    prefix:          Pointer to the null-terminated human readable prefix to use

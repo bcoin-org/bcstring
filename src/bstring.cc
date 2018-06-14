@@ -188,8 +188,8 @@ NAN_METHOD(cashaddr_encode) {
   const uint8_t *hash = (uint8_t *)node::Buffer::Data(hashbuf);
   size_t hash_len = node::Buffer::Length(hashbuf);
 
-  char output[1024]; // TODO check max len
-  memset(&output, 0, 1024);
+  char output[197];
+  memset(&output, 0, 197);
   size_t olen = 0;
 
   bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
@@ -225,11 +225,11 @@ NAN_METHOD(cashaddr_decode) {
 
   v8::Local<v8::Object> ret = info[2].As<v8::Object>();
 
-  uint8_t hash[64]; // TODO check max len
-  memset(hash, 0, 64);
+  uint8_t hash[65];
+  memset(hash, 0, 65);
   size_t hash_len;
   int type;
-  char prefix[84]; // TODO check max len
+  char prefix[84];
   memset(prefix, 0, 84);
   size_t prefix_len;
 

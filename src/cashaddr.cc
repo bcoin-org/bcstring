@@ -422,7 +422,8 @@ bstring_cashaddr_test(
   const char *addr
 ) {
   char prefix[84];
-  uint8_t hash[64];
+  uint8_t hash[65];
+  memset(hash, 0, 65);
   size_t hash_len;
   int type = 0;
 
