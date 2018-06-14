@@ -44,13 +44,13 @@ typedef enum bstring_cashaddr_error_t {
  *  Out:
  *    err:             Pointer to an int that will be updated to contain the error
  *                     number with specific details.
- *    output:          Pointer to a buffer of size 73 (TODO check size) + strlen(prefix)
+ *    output:          Pointer to a buffer of max 64 + 1 + 83 bytes
  *                     that will be updated to contain the null-terminated address.
  *  In:
  *    prefix:          Pointer to the null-terminated human readable prefix to use
- *                     (chain/network specific).
+ *                     (chain/network specific), 83 bytes max.
  *    type:            The type of the address 0 or 1 for P2KH and P2SH.
- *    hash:            Data bytes for the hash from 20 to 64 bytes.
+ *    hash:            Data bytes for the hash from 20, 24, 28, 32, 40, 48, 56 and 64 bytes.
  *    hash_len:        Number of data bytes in hash from 20 to 64 bytes.
  *  Returns true if successful.
  */
@@ -71,12 +71,12 @@ bstring_cashaddr_encode(
  *                     number with specific details.
  *    type:            Pointer to an int that will be updated to contain the type
  *                     of address (0 or 1 for P2KH or P2SH).
- *    hash:            Pointer to a buffer of size 20 to 64 bytes that will be
- *                     updated to contain the hash.
+ *    hash:            Pointer to a buffer of size 20, 24, 28, 32, 40, 48, 56 and 64
+ *                     bytes that will be updated to contain the hash.
  *    hash_len:        Pointer to a size_t that will be updated to contain the
  *                     length of bytes in the hash.
  *    prefix:          Pointer to the null-terminated human readable prefix that
- *                     will be updated to contain the string.
+ *                     will be updated to contain the string, 83 bytes max.
  *  In:
  *    default_prefix:  Default prefix to be used, in the event that the addr
  *                     does not include the prefix.
