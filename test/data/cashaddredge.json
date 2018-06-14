@@ -82,6 +82,14 @@
   {
     "bytes": 64,
     "type": 0,
+    "addr": "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp:quqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq04mndmq3",
+    "prefix": "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "hash": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "note": "64 byte max buffer and 83 byte max prefix"
+  },
+  {
+    "bytes": 64,
+    "type": 0,
     "addr": "PREFIX:QLRR4DZRE3HD7QKPP035FXK278TLCLLJAZGEYTN4DRNX36JYG9VPWQGVPXNMAPEA6UKDH898UD0MRE86Y5QEJKCV3DUT2LLMH4E4W4RUDQ5RY0KN",
     "prefix": "prefix",
     "hash": "C63AB443CC6EDF02C10BE3449ACAF1D7FC7FF2E891922E7568E668EA44415817010C09A7BE873DD72CDB9CA7E35FB1E4FA2501995B0C8B78B57FFBBD7357547C",

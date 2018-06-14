@@ -124,5 +124,12 @@
     "hash": "1e5f3e416a3b117ce162e58c6c63f76b063451ad6753731ff71c6c5e84362b322742bcc3f057480f5b9b90af86aaef9247aae641476018a4e8e1c18e4cafd2815edfd7df2fe9f614ac608e97e172388c682a287b8fa8b0bfd04834d9a6f91a5df2e294316d66f34dba290aada19f9983854405ed15d9b678c56445acc7d07e4c",
     "reason": "Non standard length.",
     "note": "128 bytes is too large by 64 bytes"
+  },
+  {
+    "prefix": "ppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp",
+    "type": 1,
+    "hash": "475aa93e10266f9ac6398bdcd9ca3f7d02ea3f4342101f8753f47620d56958176055fe7b986d0c8d13696106fd062e6577ca723831e7b2e8886f1c3a3fdf5d690e",
+    "reason": "Non standard length.",
+    "note": "hash too large by 1 byte w/ max prefix"
   }
 ]
