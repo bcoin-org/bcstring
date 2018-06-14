@@ -1,3 +1,5 @@
+// Copyright (c) 2018 the bcoin developers
+//
 // Parts of this software are based on "CashAddr".
 // https://github.com/Bitcoin-ABC/bitcoin-abc
 // Parts of this software are based on "bech32".

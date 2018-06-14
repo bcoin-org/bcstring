@@ -83,7 +83,7 @@ cashaddr_encoded_size(size_t bytes, uint8_t *encoded_size) {
   return true;
 }
 
-static int
+static bool
 cashaddr_encode(
   bstring_cashaddr_error *err,
   char *output,
@@ -100,7 +100,7 @@ cashaddr_encode(
   while (prefix[i] != 0) {
     const char pch = prefix[i];
     if (!(pch >> 5))
-      return 0;
+      return false;
 
     if (pch >= 'a' && pch <= 'z') {
       have_lower = true;
@@ -114,13 +114,13 @@ cashaddr_encode(
     i += 1;
     if (i > 83) {
       *err = bstring_cashaddr_ERR_PREFIX;
-      return 0;
+      return false;
     }
   }
 
   if ((have_upper && have_lower) || i == 0) {
     *err = bstring_cashaddr_ERR_PREFIX;
-    return 0;
+    return false;
   }
 
   chk = cashaddr_polymod_step(chk);
@@ -129,7 +129,7 @@ cashaddr_encode(
   for (i = 0; i < data_len; i++) {
     uint8_t ch = data[i];
     if (ch >> 5)
-      return 0;
+      return false;
 
     chk = cashaddr_polymod_step(chk);
     chk ^= ch;
@@ -144,7 +144,7 @@ cashaddr_encode(
   for (i = 0; i < 8; i++)
     *(output++) = CHARSET[(chk >> ((7 - i) * 5)) & 0x1f];
 
-  return 1;
+  return true;
 }
 
 static bool
