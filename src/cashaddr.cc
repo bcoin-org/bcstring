@@ -118,12 +118,7 @@ cashaddr_encode(
     }
   }
 
-  if (have_upper && have_lower) {
-    *err = bstring_cashaddr_ERR_PREFIX;
-    return 0;
-  }
-
-  if (i == 0) {
+  if ((have_upper && have_lower) || i == 0) {
     *err = bstring_cashaddr_ERR_PREFIX;
     return 0;
   }
