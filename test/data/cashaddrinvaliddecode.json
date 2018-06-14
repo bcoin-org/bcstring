@@ -26,27 +26,27 @@
   },
   {
     "addr": "bitcoincash:quqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqae3zaarz",
-    "reason": "Invalid data length.",
+    "reason": "Invalid cashaddr data length.",
     "note": "Data length is too long"
   },
   {
     "addr": "bitcoincash:quqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqae3zaarz",
-    "reason": "Invalid data length.",
+    "reason": "Invalid cashaddr data length.",
     "note": "Data length is really too long"
   },
   {
     "addr": "bitcoincash:ae3zaarz",
-    "reason": "Invalid data length.",
+    "reason": "Invalid cashaddr data length.",
     "note": "Missing data"
   },
   {
     "addr": ":qqqqqz9njldwwzlg9v7v53unlr4jkmx6eycaeuzs77",
-    "reason": "Invalid prefix length.",
+    "reason": "Invalid cashaddr prefix.",
     "note": "Missing prefix, however with semicolon"
   },
   {
     "addr": "prefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefix:qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9s6yrdsd",
-    "reason": "Invalid prefix length.",
+    "reason": "Invalid cashaddr prefix.",
     "note": "Prefix is one character too long"
   },
   {
@@ -56,7 +56,7 @@
   },
   {
     "addr": "bitcoincash:Cq92bpGSB2z/DvCNmRPzQGJzktY=",
-    "reason": "Invalid character.",
+    "reason": "Invalid cashaddr character.",
     "note": "Base64 encoding not expected"
   },
   {

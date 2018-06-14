@@ -162,7 +162,6 @@ cashaddr_decode(
   const char *input
 ) {
   uint64_t chk = 1;
-  size_t i;
   size_t input_len = strlen(input);
   size_t prefix_len = 0;
 
@@ -175,8 +174,13 @@ cashaddr_decode(
     return false;
   }
 
-  while (prefix_len < input_len && input[prefix_len] != ':')
+  while (prefix_len < input_len && input[prefix_len] != ':') {
     prefix_len++;
+    if (prefix_len > 83) {
+      *err = bstring_cashaddr_ERR_PREFIX;
+      return false;
+    }
+  }
 
   const bool has_prefix = !(prefix_len == input_len);
 
@@ -184,14 +188,19 @@ cashaddr_decode(
   size_t prefix_input_len = has_prefix ? prefix_len : strlen(default_prefix);
   *data_len = has_prefix ? input_len - (1 + prefix_len) : input_len;
 
-  if (prefix_input_len < 1 || *data_len < 8) {
+  if (prefix_input_len < 1) {
+    *err = bstring_cashaddr_ERR_PREFIX;
+    return false;
+  }
+
+  if (*data_len < 8) {
     *err = bstring_cashaddr_ERR_LENGTH;
     return false;
   }
 
   *data_len -= 8;
 
-  for (i = 0; i < prefix_input_len; i++) {
+  for (size_t i = 0; i < prefix_input_len; i++) {
     int ch = prefix_input[i];
 
     if (ch < 33 || ch > 126) {
@@ -213,16 +222,22 @@ cashaddr_decode(
 
   chk = cashaddr_polymod_step(chk);
 
-  i = has_prefix ? prefix_len + 1 : 0;
+  size_t j = has_prefix ? prefix_len + 1 : 0;
+  size_t payload_len = 0;
 
-  while (i < input_len) {
-    int v = (input[i] & 0xff80) ? -1 : TABLE[(int)input[i]];
+  while (j < input_len) {
+    int v = (input[j] & 0xff80) ? -1 : TABLE[(int)input[j]];
 
-    if (input[i] >= 'a' && input[i] <= 'z')
+    if (input[j] >= 'a' && input[j] <= 'z')
       have_lower = true;
 
-    if (input[i] >= 'A' && input[i] <= 'Z')
+    if (input[j] >= 'A' && input[j] <= 'Z')
       have_upper = true;
+
+    if (input[j] == ':') {
+      *err = bstring_cashaddr_ERR_SEPARATOR;
+      return false;
+    }
 
     if (v == -1) {
       *err = bstring_cashaddr_ERR_CHARACTER;
@@ -231,12 +246,24 @@ cashaddr_decode(
 
     chk = cashaddr_polymod_step(chk) ^ v;
 
-    if (i + 8 < input_len) {
-      int x = has_prefix ? i - (1 + prefix_len) : i;
+    if (j + 8 < input_len) {
+      int x = has_prefix ? j - (1 + prefix_len) : j;
       data[x] = v;
     }
 
-    i += 1;
+    j += 1;
+    payload_len += 1;
+
+    if (payload_len > 112) {
+      *err = bstring_cashaddr_ERR_LENGTH;
+      return false;
+    }
+
+  }
+
+  if (payload_len <= 8) {
+    *err = bstring_cashaddr_ERR_LENGTH;
+    return false;
   }
 
   if (have_lower && have_upper) {
@@ -420,13 +447,15 @@ bstring_cashaddr_strerror(bstring_cashaddr_error err) {
   case bstring_cashaddr_ERR_NONZERO_PADDING:
     return "Non zero padding.";
   case bstring_cashaddr_ERR_CHARACTER:
-    return "Invalid character.";
+    return "Invalid cashaddr character.";
   case bstring_cashaddr_ERR_PREFIX:
     return "Invalid cashaddr prefix.";
   case bstring_cashaddr_ERR_TYPE:
     return "Invalid cashaddr type.";
   case bstring_cashaddr_ERR_SIZE:
     return "Non standard length.";
+  case bstring_cashaddr_ERR_SEPARATOR:
+    return "Invalid cashaddr separators.";
   default:
     return "Invalid cashaddr string.";
   }

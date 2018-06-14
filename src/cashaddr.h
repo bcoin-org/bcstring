@@ -34,6 +34,7 @@ typedef enum bstring_cashaddr_error_t {
   bstring_cashaddr_ERR_PREFIX,
   bstring_cashaddr_ERR_TYPE,
   bstring_cashaddr_ERR_SIZE,
+  bstring_cashaddr_ERR_SEPARATOR
 } bstring_cashaddr_error;
 
 #include <stdint.h>
