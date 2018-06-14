@@ -168,8 +168,7 @@ cashaddr_decode(
   bool have_lower = false;
   bool have_upper = false;
 
-  // TODO check max length
-  if (input_len < 8 || input_len > 1024) {
+  if (input_len < 8 || input_len > 196) { // 83 + 1 + 112
     *err = bstring_cashaddr_ERR_LENGTH;
     return false;
   }
@@ -350,7 +349,7 @@ bstring_cashaddr_encode(
   memcpy(data + 1, hash, hash_len);
 
   size_t converted_len = 0;
-  uint8_t converted[data_len + 8]; // TODO check max len
+  uint8_t converted[(data_len * 8 / 5) + 1];
 
   if (!convert_bits(err, converted, &converted_len, 5, data, data_len, 8, 1)) {
     return false;
@@ -369,8 +368,8 @@ bstring_cashaddr_decode(
   const char *default_prefix,
   const char *addr
 ) {
-  uint8_t data[1024];  // TODO check max length
-  memset(&data, 0, 1024);
+  uint8_t data[112 + 1];
+  memset(&data, 0, 112 + 1);
   size_t data_len = 0;
 
   if (!cashaddr_decode(err, prefix, data, &data_len, default_prefix, addr))
@@ -390,10 +389,9 @@ bstring_cashaddr_decode(
     return false;
   }
 
-  // TODO check data_len
-
-  uint8_t converted[1024]; // TODO check max length
-  memset(&converted, 0, 1024);
+  size_t _converted_len = (data_len * 5 / 8) + 1;
+  uint8_t converted[_converted_len + 1];
+  memset(&converted, 0, _converted_len + 1);
   size_t converted_len = 0;
 
   if (!convert_bits(err, converted, &converted_len, 8, data, data_len, 5, 0))
@@ -423,11 +421,12 @@ bstring_cashaddr_test(
   const char *default_prefix,
   const char *addr
 ) {
-  char prefix[84]; // TODO check max length
-  uint8_t data[84]; // TODO check max length
-  size_t data_len;
+  char prefix[84];
+  uint8_t hash[64];
+  size_t hash_len;
+  int type = 0;
 
-  if (!cashaddr_decode(err, prefix, data, &data_len, default_prefix, addr))
+  if (!bstring_cashaddr_decode(err, &type, hash, &hash_len, prefix, default_prefix, addr))
     return false;
 
   return true;
