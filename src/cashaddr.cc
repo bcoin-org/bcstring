@@ -266,9 +266,8 @@ cashaddr_decode(
   }
 
   bool valid_checksum = (chk == 1);
-  if (!valid_checksum) {
+  if (!valid_checksum)
     *err = bstring_cashaddr_ERR_CHECKSUM;
-  }
 
   return valid_checksum;
 }
@@ -346,9 +345,8 @@ bstring_cashaddr_encode(
   size_t converted_len = 0;
   uint8_t converted[(data_len * 8 / 5) + 1];
 
-  if (!convert_bits(err, converted, &converted_len, 5, data, data_len, 8, 1)) {
+  if (!convert_bits(err, converted, &converted_len, 5, data, data_len, 8, 1))
     return false;
-  }
 
   return cashaddr_encode(err, output, prefix, converted, converted_len);
 }

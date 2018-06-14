@@ -194,9 +194,8 @@ NAN_METHOD(cashaddr_encode) {
 
   bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
 
-  if (!bstring_cashaddr_encode(&err, output, prefix, type, hash, hash_len)) {
+  if (!bstring_cashaddr_encode(&err, output, prefix, type, hash, hash_len))
     return Nan::ThrowError(bstring_cashaddr_strerror(err));
-  }
 
   olen = strlen((char *)output);
 
@@ -235,9 +234,8 @@ NAN_METHOD(cashaddr_decode) {
 
   bstring_cashaddr_error err = bstring_cashaddr_ERR_NULL;
 
-  if (!bstring_cashaddr_decode(&err, &type, hash, &hash_len, prefix, default_prefix, addr)) {
+  if (!bstring_cashaddr_decode(&err, &type, hash, &hash_len, prefix, default_prefix, addr))
     return Nan::ThrowError(bstring_cashaddr_strerror(err));
-  }
 
   prefix_len = strlen((char *)&prefix[0]);
 
