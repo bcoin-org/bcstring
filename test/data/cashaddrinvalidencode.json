@@ -3,29 +3,22 @@
     "prefix": "",
     "type": 0,
     "hash": "d1263579c204e17e054fb85963df503311c164da",
-    "reason": "Missing prefix",
+    "reason": "Invalid cashaddr prefix.",
     "note": "Prefix is necessary"
   },
   {
     "prefix": "pReFiX",
     "type": 1,
     "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
-    "reason": "Invalid cashaddr casing.",
+    "reason": "Invalid cashaddr prefix.",
     "note": "Mixed case prefix should be rejected"
   },
   {
     "prefix": "prefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefix",
     "type": 1,
     "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
-    "reason": "Invalid cashaddr length.",
+    "reason": "Invalid cashaddr prefix.",
     "note": "84 characters US-ASCII, too long. Not described in spec."
-  },
-  {
-    "prefix": "pr3ph1x",
-    "type": 1,
-    "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
-    "reason": "Invalid cashaddr length.",
-    "note": "Numbers in prefix. Not described in spec."
   },
   {
     "prefix": "p",

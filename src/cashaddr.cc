@@ -94,14 +94,38 @@ cashaddr_encode(
   uint64_t chk = 1;
   size_t i = 0;
 
+  bool have_lower = false;
+  bool have_upper = false;
+
   while (prefix[i] != 0) {
-    if (!(prefix[i] >> 5))
+    const char pch = prefix[i];
+    if (!(pch >> 5))
       return 0;
+
+    if (pch >= 'a' && pch <= 'z') {
+      have_lower = true;
+    } else if (pch >= 'A' && pch <= 'Z') {
+      have_upper = true;
+    }
 
     chk = cashaddr_polymod_step(chk);
     chk ^= (prefix[i] & 0x1f);
     *(output++) = prefix[i];
     i += 1;
+    if (i > 83) {
+      *err = bstring_cashaddr_ERR_PREFIX;
+      return 0;
+    }
+  }
+
+  if (have_upper && have_lower) {
+    *err = bstring_cashaddr_ERR_PREFIX;
+    return 0;
+  }
+
+  if (i == 0) {
+    *err = bstring_cashaddr_ERR_PREFIX;
+    return 0;
   }
 
   chk = cashaddr_polymod_step(chk);
@@ -142,8 +166,8 @@ cashaddr_decode(
   size_t input_len = strlen(input);
   size_t prefix_len = 0;
 
-  int have_lower = 0;
-  int have_upper = 0;
+  bool have_lower = false;
+  bool have_upper = false;
 
   // TODO check max length
   if (input_len < 8 || input_len > 1024) {
@@ -176,9 +200,9 @@ cashaddr_decode(
     }
 
     if (ch >= 'a' && ch <= 'z') {
-      have_lower = 1;
+      have_lower = true;
     } else if (ch >= 'A' && ch <= 'Z') {
-      have_upper = 1;
+      have_upper = true;
       ch = (ch - 'A') + 'a';
     }
 
@@ -195,10 +219,10 @@ cashaddr_decode(
     int v = (input[i] & 0xff80) ? -1 : TABLE[(int)input[i]];
 
     if (input[i] >= 'a' && input[i] <= 'z')
-      have_lower = 1;
+      have_lower = true;
 
     if (input[i] >= 'A' && input[i] <= 'Z')
-      have_upper = 1;
+      have_upper = true;
 
     if (v == -1) {
       *err = bstring_cashaddr_ERR_CHARACTER;
@@ -281,11 +305,15 @@ bstring_cashaddr_encode(
   uint8_t encoded_size = 0;
 
   // There are 4 bits available for the version (2 ^ 4 = 16)
-  if (type < 0 || type > 15)
+  if (type < 0 || type > 15) {
+    *err = bstring_cashaddr_ERR_TYPE;
     return false;
+  }
 
-  if (!cashaddr_encoded_size(hash_len, &encoded_size))
+  if (!cashaddr_encoded_size(hash_len, &encoded_size)) {
+    *err = bstring_cashaddr_ERR_SIZE;
     return false;
+  }
 
   uint8_t version_byte = type << 3 | encoded_size;
 
@@ -393,6 +421,12 @@ bstring_cashaddr_strerror(bstring_cashaddr_error err) {
     return "Non zero padding.";
   case bstring_cashaddr_ERR_CHARACTER:
     return "Invalid character.";
+  case bstring_cashaddr_ERR_PREFIX:
+    return "Invalid cashaddr prefix.";
+  case bstring_cashaddr_ERR_TYPE:
+    return "Invalid cashaddr type.";
+  case bstring_cashaddr_ERR_SIZE:
+    return "Non standard length.";
   default:
     return "Invalid cashaddr string.";
   }

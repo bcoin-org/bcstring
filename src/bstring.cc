@@ -175,7 +175,7 @@ NAN_METHOD(cashaddr_encode) {
   Nan::Utf8String prefix_str(info[0]);
 
   if (!info[1]->IsNumber())
-    return Nan::ThrowTypeError("Second argument must be a number.");
+    return Nan::ThrowTypeError("Invalid cashaddr type.");
 
   v8::Local<v8::Object> hashbuf = info[2].As<v8::Object>();
 

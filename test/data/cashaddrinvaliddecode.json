@@ -58,5 +58,10 @@
     "addr": "bitcoincash:Cq92bpGSB2z/DvCNmRPzQGJzktY=",
     "reason": "Invalid character.",
     "note": "Base64 encoding not expected"
+  },
+  {
+    "addr": "bitcoin:cash:qr6m7j9njldwwzlg9v7v53unlr4jkmx6eylep8ekg",
+    "reason": "Invalid cashaddr separators.",
+    "note": "Multiple separators not supported"
   }
 ]
