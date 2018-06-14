@@ -34,7 +34,6 @@ const base58 = require('../lib/base58');
 const cashaddrc = require('../lib/cashaddr');
 const cashaddrjs = require('../lib/cashaddr-browser');
 
-const testChecksumVectors = require('./data/cashaddrchecksum.json');
 const {
   p2pkh: addressTranslationP2PKH,
   p2sh: addressTranslationP2SH
@@ -45,22 +44,6 @@ const invalidEncodeVectors = require('./data/cashaddrinvalidencode.json');
 const validEdgeVectors = require('./data/cashaddredge.json');
 
 function testCashAddr(cashaddr) {
-  describe('checksums', function() {
-    for (const test of testChecksumVectors) {
-      it(`should deserialize ${test.test}.`, () => {
-        const [prefix, data] = cashaddr.deserialize(test.test);
-
-        assert.strictEqual(prefix, test.prefix);
-        assert.bufferEqual(data, Buffer.from(test.data, 'hex'));
-      });
-
-      it(`should serialize ${test.test}.`, () => {
-        const addr = cashaddr.serialize(test.prefix, test.data);
-        assert.strictEqual(addr, test.test);
-      });
-    }
-  });
-
   describe('encoding', function() {
     for (const test of testSizeVectors) {
       it(`should encode address ${test.addr} (${test.bytes} bytes) correctly`, () => {
