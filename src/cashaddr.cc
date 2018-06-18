@@ -207,6 +207,9 @@ cashaddr_decode(
     } else if (ch >= 'A' && ch <= 'Z') {
       have_upper = true;
       ch = (ch - 'A') + 'a';
+    } else if (ch >= '0' && ch <= '9') {
+      *err = bstring_cashaddr_ERR_PREFIX;
+      return false;
     }
 
     prefix[i] = ch;
