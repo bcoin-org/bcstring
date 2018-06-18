@@ -268,7 +268,7 @@ cashaddr_decode(
     return false;
   }
 
-  bool valid_checksum = (chk == 1);
+  bool valid_checksum = (chk == 1) && (strcmp(prefix, default_prefix) == 0);
   if (!valid_checksum)
     *err = bstring_cashaddr_ERR_CHECKSUM;
 

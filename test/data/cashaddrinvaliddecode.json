@@ -1,8 +1,14 @@
 [
   {
-    "addr": "bitcoincash:pr5vxqxg0xrwl2zvxlq9rxffqx00sm44ks62zuqyrr",
+    "addr": "prgq00r9x8r3q09aj0g75wmjjr7tkvreusdp3g5tw8",
     "prefix": "notbitcoincash",
-    "reason": "Mismatched cashaddr prefix.",
+    "reason": "Invalid cashaddr checksum.",
+    "note": "An unexpected prefix"
+  },
+  {
+    "addr": "bitcoincash:prgq00r9x8r3q09aj0g75wmjjr7tkvreusdp3g5tw8",
+    "prefix": "notbitcoincash",
+    "reason": "Invalid cashaddr checksum.",
     "note": "An unexpected prefix"
   },
   {

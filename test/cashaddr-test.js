@@ -55,7 +55,7 @@ function testCashAddr(cashaddr) {
       });
 
       it(`should decode address ${test.addr} (${test.bytes} bytes)`, () => {
-        const { type, prefix, hash } = cashaddr.decode(test.addr);
+        const { type, prefix, hash } = cashaddr.decode(test.addr, test.prefix);
         assert.strictEqual(type, test.type);
         assert.strictEqual(prefix, test.prefix);
         assert.bufferEqual(hash, Buffer.from(test.hash, 'hex'));
@@ -208,7 +208,7 @@ function testCashAddr(cashaddr) {
       });
 
       it(`decode ${test.note} with address: ${test.addr}`, () => {
-        const { type, prefix, hash } = cashaddr.decode(test.addr);
+        const { type, prefix, hash } = cashaddr.decode(test.addr, test.prefix);
         assert.strictEqual(type, test.type);
         assert.strictEqual(prefix.toLowerCase(), test.prefix.toLowerCase());
         assert.bufferEqual(hash, Buffer.from(test.hash, 'hex'));
@@ -217,7 +217,7 @@ function testCashAddr(cashaddr) {
       it(`roundtrip ${test.note} with address: ${test.addr}`, () => {
         const addr = cashaddr.encode(
           test.prefix, test.type, Buffer.from(test.hash, 'hex'));
-        const { type, prefix, hash } = cashaddr.decode(test.addr);
+        const { type, prefix, hash } = cashaddr.decode(test.addr, test.prefix);
         assert.strictEqual(type, test.type);
         assert.strictEqual(prefix.toLowerCase(), test.prefix.toLowerCase());
         assert.bufferEqual(hash, Buffer.from(test.hash, 'hex'));
