@@ -110,7 +110,14 @@ cashaddr_encode(
 
     chk = cashaddr_polymod_step(chk);
     chk ^= (prefix[i] & 0x1f);
-    *(output++) = prefix[i];
+
+    // lowercase prefix
+    if (prefix[i] >= 65 && prefix[i] <= 90) {
+      *(output++) = prefix[i] + 32;
+    } else {
+      *(output++) = prefix[i];
+    }
+
     i += 1;
     if (i > 83) {
       *err = bstring_cashaddr_ERR_PREFIX;
