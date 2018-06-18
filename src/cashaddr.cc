@@ -106,6 +106,9 @@ cashaddr_encode(
       have_lower = true;
     } else if (pch >= 'A' && pch <= 'Z') {
       have_upper = true;
+    } else if (pch >= '0' && pch <= '9') {
+      *err = bstring_cashaddr_ERR_PREFIX;
+      return false;
     }
 
     chk = cashaddr_polymod_step(chk);
