@@ -204,7 +204,7 @@ NAN_METHOD(cashaddr_encode) {
 }
 
 NAN_METHOD(cashaddr_decode) {
-  if (info.Length() < 2)
+  if (info.Length() < 3)
     return Nan::ThrowError("cashaddr_decode() requires arguments.");
 
   if (!info[0]->IsString())
