@@ -14,6 +14,13 @@
     "note": "Mixed case prefix should be rejected"
   },
   {
+    "prefix": "pr3f1x",
+    "type": 1,
+    "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",
+    "reason": "Invalid cashaddr prefix.",
+    "note": "Prefix with numbers. Not described in spec, and w/o clear rationale."
+  },
+  {
     "prefix": "prefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefixprefix",
     "type": 1,
     "hash": "d007bc6531c7103cbd93d1ea3b7290fcbb3079e4",

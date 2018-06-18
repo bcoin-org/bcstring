@@ -6,6 +6,12 @@
     "note": "An unexpected prefix"
   },
   {
+    "addr": "pr3f1x:prgq00r9x8r3q09aj0g75wmjjr7tkvreusdmpmxgtw",
+    "prefix": "pr3f1x",
+    "reason": "Invalid cashaddr prefix.",
+    "note": "Prefix with numbers. Not described in spec, and w/o clear rationale."
+  },
+  {
     "addr": "bitcoincash:pr5vxqxg0xrwl2zvxlq9rxffqx00sm44ks62zuqyrr",
     "prefix": "bitcoincash",
     "reason": "Invalid cashaddr checksum.",
