@@ -173,7 +173,7 @@ function testCashAddr(cashaddr) {
         let err;
 
         try {
-          cashaddr.decode(addrinfo.addr);
+          cashaddr.decode(addrinfo.addr, addrinfo.prefix);
         } catch(e) {
           err = e;
         }
@@ -201,13 +201,22 @@ function testCashAddr(cashaddr) {
 
   describe('valid edge cases', function() {
     for (const test of validEdgeVectors) {
-      it(`${test.note} with address: ${test.addr}`, () => {
+      it(`encode ${test.note} with address: ${test.addr}`, () => {
         const addr = cashaddr.encode(
           test.prefix, test.type, Buffer.from(test.hash, 'hex'));
         assert.strictEqual(addr, test.addr.toLowerCase());
       });
 
-      it(`${test.note} with address: ${test.addr}`, () => {
+      it(`decode ${test.note} with address: ${test.addr}`, () => {
+        const { type, prefix, hash } = cashaddr.decode(test.addr);
+        assert.strictEqual(type, test.type);
+        assert.strictEqual(prefix.toLowerCase(), test.prefix.toLowerCase());
+        assert.bufferEqual(hash, Buffer.from(test.hash, 'hex'));
+      });
+
+      it(`roundtrip ${test.note} with address: ${test.addr}`, () => {
+        const addr = cashaddr.encode(
+          test.prefix, test.type, Buffer.from(test.hash, 'hex'));
         const { type, prefix, hash } = cashaddr.decode(test.addr);
         assert.strictEqual(type, test.type);
         assert.strictEqual(prefix.toLowerCase(), test.prefix.toLowerCase());
