@@ -125,7 +125,7 @@ function testCashAddr(cashaddr) {
     }
 
     for (const addrinfo of addressTranslationP2PKH) {
-      it(`should decode P2PKH with default prefix ${addrinfo.cashaddr}`, () => {
+      it(`should decode P2PKH with prefix ${addrinfo.cashaddr}`, () => {
         const defaultPrefix = 'bitcoincash';
         const addr = addrinfo.cashaddr.split(':')[1];
         const results = cashaddr.decode(addr, defaultPrefix);
@@ -134,13 +134,31 @@ function testCashAddr(cashaddr) {
         assert.strictEqual(results.type, 0);
         assert.bufferEqual(results.hash, Buffer.from(addrinfo.hash, 'hex'));
       });
+
+      it(`should decode P2PKH with default prefix ${addrinfo.cashaddr}`, () => {
+        const addr = addrinfo.cashaddr.split(':')[1];
+        const results = cashaddr.decode(addr);
+
+        assert.strictEqual(results.prefix, 'bitcoincash');
+        assert.strictEqual(results.type, 0);
+        assert.bufferEqual(results.hash, Buffer.from(addrinfo.hash, 'hex'));
+      });
     }
 
     for (const addrinfo of addressTranslationP2SH) {
-      it(`should decode P2Sh with default prefix ${addrinfo.cashaddr}`, () => {
+      it(`should decode P2Sh with prefix ${addrinfo.cashaddr}`, () => {
         const defaultPrefix = 'bitcoincash';
         const addr = addrinfo.cashaddr.split(':')[1];
         const results = cashaddr.decode(addr, defaultPrefix);
+
+        assert.strictEqual(results.prefix, 'bitcoincash');
+        assert.strictEqual(results.type, 1);
+        assert.bufferEqual(results.hash, Buffer.from(addrinfo.hash, 'hex'));
+      });
+
+      it(`should decode P2Sh with default prefix ${addrinfo.cashaddr}`, () => {
+        const addr = addrinfo.cashaddr.split(':')[1];
+        const results = cashaddr.decode(addr);
 
         assert.strictEqual(results.prefix, 'bitcoincash');
         assert.strictEqual(results.type, 1);
