@@ -79,7 +79,7 @@ bstring_cashaddr_encode(
  *                     will be updated to contain the string, 83 bytes max.
  *  In:
  *    default_prefix:  Default prefix to be used, in the event that the addr
- *                     does not include the prefix.
+ *                     does not include the prefix. Should be lowercase and w/o numbers.
  *    addr:            Pointer to the null-terminated address.
  *  Returns true if successful.
  */
