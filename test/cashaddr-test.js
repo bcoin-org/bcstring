@@ -48,12 +48,13 @@ const validEdgeVectors = require('./data/cashaddredge.json');
 function testCashAddr(cashaddr) {
   describe('encoding', function() {
     for (const test of testSizeVectors) {
-      it(`should encode address ${test.addr} (${test.bytes} bytes) correctly`, () => {
-        const addr = cashaddr.encode(test.prefix, test.type, Buffer.from(test.hash, 'hex'));
+      it(`should encode address ${test.addr} (${test.bytes} bytes)`, () => {
+        const addr = cashaddr.encode(
+          test.prefix, test.type, Buffer.from(test.hash, 'hex'));
         assert.strictEqual(addr, test.addr);
       });
 
-      it(`should decode address ${test.addr} (${test.bytes} bytes) correctly`, () => {
+      it(`should decode address ${test.addr} (${test.bytes} bytes)`, () => {
         const { type, prefix, hash } = cashaddr.decode(test.addr);
         assert.strictEqual(type, test.type);
         assert.strictEqual(prefix, test.prefix);
@@ -98,7 +99,8 @@ function testCashAddr(cashaddr) {
       });
 
       it(`should encode P2PKH for ${addrinfo.cashaddr}`, () => {
-        const addr = cashaddr.encode('bitcoincash', 0, Buffer.from(addrinfo.hash, 'hex'));
+        const addr = cashaddr.encode(
+          'bitcoincash', 0, Buffer.from(addrinfo.hash, 'hex'));
 
         assert.strictEqual(addr, addrinfo.cashaddr);
       });
@@ -115,7 +117,8 @@ function testCashAddr(cashaddr) {
       });
 
       it(`should encode P2SH for ${addrinfo.cashaddr}`, () => {
-        const addr = cashaddr.encode('bitcoincash', 1, Buffer.from(addrinfo.hash, 'hex'));
+        const addr = cashaddr.encode(
+          'bitcoincash', 1, Buffer.from(addrinfo.hash, 'hex'));
 
         assert.strictEqual(addr, addrinfo.cashaddr);
       });
@@ -152,7 +155,7 @@ function testCashAddr(cashaddr) {
         let err;
 
         try {
-          const { type, prefix, hash } = cashaddr.decode(addrinfo.addr);
+          cashaddr.decode(addrinfo.addr);
         } catch(e) {
           err = e;
         }
@@ -167,7 +170,8 @@ function testCashAddr(cashaddr) {
       it(`"${test.reason}" (${test.note})`, () => {
         let err;
         try {
-          const addr = cashaddr.encode(test.prefix, test.type, Buffer.from(test.hash, 'hex'));
+          cashaddr.encode(
+            test.prefix, test.type, Buffer.from(test.hash, 'hex'));
         } catch(e) {
           err = e;
         }
@@ -180,7 +184,8 @@ function testCashAddr(cashaddr) {
   describe('valid edge cases', function() {
     for (const test of validEdgeVectors) {
       it(`${test.note} with address: ${test.addr}`, () => {
-        const addr = cashaddr.encode(test.prefix, test.type, Buffer.from(test.hash, 'hex'));
+        const addr = cashaddr.encode(
+          test.prefix, test.type, Buffer.from(test.hash, 'hex'));
         assert.strictEqual(addr, test.addr.toLowerCase());
       });
 
@@ -192,7 +197,6 @@ function testCashAddr(cashaddr) {
       });
     }
   });
-
 }
 
 describe('cashaddr', function() {
